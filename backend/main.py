@@ -1,0 +1,21 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from auth.routes import authorize, users
+
+app = FastAPI()
+app.include_router(authorize.router)
+app.include_router(users.router)
+
+origins = ["10.255.184.1"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get('/')
+def home():
+    return {"message": "Hello, World!"}
