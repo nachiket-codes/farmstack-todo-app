@@ -25,10 +25,12 @@ class User(UserReq):
             todos = [Todo.from_doc(todo) for todo in doc["todos"]]
         )
     
-class Todo(BaseModel):
-    todo_id: str
+class TodoReq(BaseModel):
     todo_text: str
     completed: bool = False
+    
+class Todo(TodoReq):
+    todo_id: str
 
     @staticmethod
     def from_doc(doc) -> "Todo":

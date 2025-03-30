@@ -1,13 +1,15 @@
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, status
 from models import UserReq
-from crud import create_user
+from crud import create_user, get_user
 from hashing import hash
-from ..oauth2 import get_current_user
 
 router = APIRouter(prefix = "/users", tags = ["Users"])
 
 @router.post('/add')
-async def add_user(user: UserReq = Depends(get_current_user)):
+async def add_user(user: UserReq):
+    userFound = await get_user(email = user.email)
+    if userFound:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User already exists")
     res = await create_user(
         username = user.username,
         email = user.email,

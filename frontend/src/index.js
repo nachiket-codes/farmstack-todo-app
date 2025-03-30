@@ -6,12 +6,13 @@ import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Login from './components/Login';
 import Signup from './components/Signup';
+import Todos from './components/Todos';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: <Todos/>,
   },
   {
     path: '/login',

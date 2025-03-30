@@ -1,12 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from auth.routes import authorize, users
+from auth.routes import authorize, users, todos
 
 app = FastAPI()
 app.include_router(authorize.router)
 app.include_router(users.router)
+app.include_router(todos.router)
 
-origins = ["10.255.184.1"]
+origins = ["http://localhost:3000"]
 
 app.add_middleware(
     CORSMiddleware,
