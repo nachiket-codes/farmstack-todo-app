@@ -10,10 +10,10 @@ router = APIRouter(tags = ["Authenticate"])
 @router.post('/login')
 async def login(loginData: LoginReq):
     user = await get_user(email = loginData.email)
-    if not user or not verify_pwd(loginData.password, user.password):
+    if not user or not verify_pwd(loginData.password, user["password"]):
         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED, detail = "Wrong login credentials")
     return {
-        'access_token' : create_access_token({'sub':user.email}),
+        'access_token' : create_access_token({'sub': user['email']}),
         'token_type' : 'bearer'
     }
 
