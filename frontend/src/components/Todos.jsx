@@ -3,11 +3,12 @@ import Header from './Header'
 import Sidebar from './Sidebar'
 import Todo from './Todo';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTodos } from '../features/TodoSlice';
+import { addTodo, fetchTodos } from '../features/TodoSlice';
 
 const Todos = () => {
     const [showSidebar, setShowSidebar] = useState(false);
     const [todoTxt, setTodoTxt] = useState('');
+    const [entryErr, setEntryErr] = useState('');
     const toggleShowSidebar = () => {
         setShowSidebar(!showSidebar)
     }
@@ -16,6 +17,22 @@ const Todos = () => {
     useEffect(() => {
       dispatch(fetchTodos());
     }, [dispatch])
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (todoTxt.trim() !== '') {
+            const todo = {
+                "todo_text": todoTxt,
+                "completed": false
+            }
+            await dispatch(addTodo(todo));
+            dispatch(fetchTodos())
+            setTodoTxt('');
+        }
+        else {
+            setEntryErr('Please enter a todo item in the input field');
+        }
+    }
 
     const loadingImgUrl = 'https://www.gif-maniac.com/gifs/31/31241.gif'
 
@@ -26,9 +43,10 @@ const Todos = () => {
         <Sidebar show={showSidebar} toggleShow={toggleShowSidebar} />
         <div className="w-full h-screen flex justify-center mt-6">
             <div className="p-4 w-full sm:w-[70%]">
-                <form action="" className="flex items-center">
-                    <input type="text" placeholder="Enter new Todo" value={todoTxt} onChange={(e)=>setTodoTxt(e.target.value)} className="border border-white text-black bg-white w-full h-14 p-2 outline-none focus:bg-violet-600 text-xl" />
+                <form action="" className="flex items-center" onSubmit={handleSubmit}>
+                    <input type="text" placeholder="Enter new Todo" value={todoTxt} onChange={(e)=>setTodoTxt(e.target.value)} className="border border-white text-white bg-white w-full h-14 p-2 outline-none focus:bg-violet-600 text-xl" />
                     <button className="border border-white bg-violet-700 h-14 p-2 outline-none text-white font-bold pr-6 pl-6 focus:bg-violet-600 text-xl hover:text-black hover:bg-violet-400 transition duration-300 ease-in-out">Add</button>
+                    {entryErr && <div className="text-red-500 text-2xl text-center">{entryErr} </div>}
                 </form>
                 <div className="w-full mt-10">
                     {
@@ -39,7 +57,7 @@ const Todos = () => {
                         :
                         error ? <div className="text-red-500 text-2xl text-center">{error} </div>
                         :
-                        <ul>
+                        <ul className="flex flex-col gap-4">
                             {
                             todos.map((todo, idx)=>{
                                 return (<Todo key={idx} todoTxt={todo.todo_text} completed={todo.completed}/>)

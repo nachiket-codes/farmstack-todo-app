@@ -18,6 +18,18 @@ export const fetchTodos = createAsyncThunk('todos/fetchTodos', async () => {
     return response.data;
 })
 
+export const addTodo = createAsyncThunk('todos/addTodo', async ( todo ) => {
+    const response = await apiClient.post('/todos/add',
+        todo,
+        {
+        headers : {
+            'Content-Type': "application/json",
+            "Authorization": "Bearer " + localStorage.getItem("token"),
+        }
+    })
+    return response.data;
+})
+
 const TodoSlice = createSlice({
     name: "Todos",
     initialState,
@@ -33,6 +45,9 @@ const TodoSlice = createSlice({
         })
         .addCase(fetchTodos.pending, (state) =>{
             state.loading = true
+        })
+        .addCase(addTodo.fulfilled, (state) => {
+            console.log("Todo added")
         })
     }
 })
