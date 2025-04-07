@@ -4,11 +4,14 @@ import Sidebar from './Sidebar'
 import Todo from './Todo';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTodo, fetchTodos } from '../features/TodoSlice';
+import { useNavigate } from 'react-router-dom';
 
 const Todos = () => {
+    const navigate = useNavigate();
     const [showSidebar, setShowSidebar] = useState(false);
     const [todoTxt, setTodoTxt] = useState('');
     const [entryErr, setEntryErr] = useState('');
+    let {todos, loading, error} = useSelector((state) => state.todo)
     const toggleShowSidebar = () => {
         setShowSidebar(!showSidebar)
     }
@@ -35,8 +38,6 @@ const Todos = () => {
     }
 
     const loadingImgUrl = 'https://www.gif-maniac.com/gifs/31/31241.gif'
-
-    const {todos, loading, error} = useSelector((state) => state.todo)
   return (
     <div className="bg-violet-900 w-full h-screen">
         <Header toggleShow={toggleShowSidebar}/>
@@ -60,7 +61,7 @@ const Todos = () => {
                         <ul className="flex flex-col gap-4">
                             {
                             todos.map((todo, idx)=>{
-                                return (<Todo key={idx} todoTxt={todo.todo_text} completed={todo.completed}/>)
+                                return (<Todo key={idx} todo={todo}/>)
                             })}
                         </ul>
                     }
