@@ -62,7 +62,7 @@ const Todo = ({todo}) => {
                 <FontAwesomeIcon className="hover:text-green-500" onClick={toggleComplete} icon={faCircleNotch}/>
             }
             
-            <p>{editVal}</p>
+            <p className={`${todo.completed ? 'line-through font-normal' : ''}`}>{editVal}</p>
         </div>
         <div className="flex gap-4 items-center">
             <FontAwesomeIcon icon={faTrash} onClick={handleDelete} className='cursor-pointer hover:text-red-600 transition duration-300 bounce-in'/>
